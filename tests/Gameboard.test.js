@@ -80,3 +80,43 @@ test("returns false when a vertical ship overlaps", () => {
 
     expect(placed).toBe(false);
 });
+test("marks an empty cell as attacked", () => {
+    const gameboard = Gameboard();
+
+    gameboard.receiveAttack(3, 4);
+
+    expect(gameboard.getBoard()[3][4].attacked).toBe(true);
+});
+test("attacking a ship calls hit on the ship",()=>{
+    const gameboard=Gameboard();
+    const ship=Ship(1);
+    gameboard.placeShip(ship,3,4,"horizontal");
+    gameboard.receiveAttack(3,4);
+
+    expect(ship.isSunk()).toBe(true);
+});
+test("allShipsSunk returns false when a placed ship is not sunk", () => {
+    const gameboard = Gameboard();
+    const ship = Ship(2);
+
+    gameboard.placeShip(ship, 0, 0, "horizontal");
+
+    expect(gameboard.allShipsSunk()).toBe(false);
+});
+test("records a missed attack", () => {
+    const gameboard = Gameboard();
+
+    gameboard.receiveAttack(4, 5);
+
+    expect(gameboard.getMissedAttacks()).toContainEqual([4, 5]);
+});
+test("Ignore the same attack on the same cell",()=>{
+    const gameboard=Gameboard();
+    const ship=Ship(2);
+    gameboard.placeShip(ship,0,0,"horizontal");
+    gameboard.receiveAttack(0,0);
+    gameboard.receiveAttack(0,0);
+
+    expect(ship.isSunk()).toBe(false);
+
+})
