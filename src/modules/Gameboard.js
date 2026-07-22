@@ -44,6 +44,9 @@ export default function Gameboard(){
 
     }
     function allShipsSunk(){
+        if (ships.length===0) {
+            return false;
+        }
         return ships.every(ship=>ship.isSunk());
     }
     function getMissedAttacks(){
